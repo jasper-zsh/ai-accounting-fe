@@ -67,7 +67,7 @@ const login = async () => {
             message: 'Login succeed',
         })
         router.replace({
-            name: 'conversations',
+            name: 'overview',
         })
     } catch (e: any) {
         switch (e.response.status) {

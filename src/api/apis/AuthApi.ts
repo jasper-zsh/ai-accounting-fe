@@ -64,6 +64,21 @@ export interface AuthApiInterface {
 
     /**
      * 
+     * @summary Logout
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApiInterface
+     */
+    authLogoutGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 
+     * Logout
+     */
+    authLogoutGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * 
      * @summary Register
      * @param {RegisterRequest} [registerRequest] 
      * @param {*} [options] Override http request option.
@@ -113,6 +128,34 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      */
     async authLoginPost(requestParameters: AuthLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse> {
         const response = await this.authLoginPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Logout
+     */
+    async authLogoutGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/auth/logout`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 
+     * Logout
+     */
+    async authLogoutGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.authLogoutGetRaw(initOverrides);
         return await response.value();
     }
 
