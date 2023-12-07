@@ -25,6 +25,10 @@ import {
     AccountsPostRequestToJSON,
 } from '../models/index';
 
+export interface AccountsIdDeleteRequest {
+    id: number;
+}
+
 export interface AccountsIdPostRequest {
     id: number;
     accountsPostRequest?: AccountsPostRequest;
@@ -55,6 +59,22 @@ export interface AccountApiInterface {
      * List Accounts
      */
     accountsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>>;
+
+    /**
+     * 
+     * @summary Delete Account
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    accountsIdDeleteRaw(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
+
+    /**
+     * 
+     * Delete Account
+     */
+    accountsIdDelete(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
 
     /**
      * 
@@ -121,6 +141,38 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      */
     async accountsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>> {
         const response = await this.accountsGetRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Delete Account
+     */
+    async accountsIdDeleteRaw(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling accountsIdDelete.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/accounts/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * Delete Account
+     */
+    async accountsIdDelete(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+        const response = await this.accountsIdDeleteRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

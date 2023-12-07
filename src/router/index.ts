@@ -47,8 +47,18 @@ const router = createRouter({
       path: '/command',
       name: 'command',
       component: CommandView,
+      meta: {
+        title: '语音记账'
+      }
     }
   ]
+})
+
+const defaultTitle = 'AI记账'
+router.beforeEach((to, from, next) => {
+  // @ts-expect-error type is unknown
+  window.document.title = to.meta.title ?? defaultTitle
+  next()
 })
 
 export default router

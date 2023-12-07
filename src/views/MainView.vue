@@ -5,6 +5,7 @@
         </div>
         <van-tabbar route>
             <van-tabbar-item icon="apps-o" replace :to="{ name: 'overview' }">总览</van-tabbar-item>
+            <van-tabbar-item icon="volume-o" :to="{ name: 'command' }">语音</van-tabbar-item>
             <van-tabbar-item icon="debit-pay" replace :to="{ name: 'accounts' }">账户</van-tabbar-item>
             <van-tabbar-item icon="user-o" replace :to="{ name: 'profile' }">设置</van-tabbar-item>
         </van-tabbar>

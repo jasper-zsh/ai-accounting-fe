@@ -1,11 +1,17 @@
 <template>
     <div class="transaction-record">
-        <van-cell
-            :title="`${categoryName} - ${transaction.comment}`"
-            :label="`${transTime} - ${accountName}`"
-            :value="amount"
-            :value-class="transaction.type"
-        />
+        <van-swipe-cell>
+            <van-cell
+                :title="`${transaction.category?.name ?? '未分类'}${transaction.comment ? ' - ' + transaction.comment : ''}`"
+                :label="`${transTime} - ${transaction.account?.name ?? '未知账户'}`"
+                :value="amount"
+                :value-class="transaction.type"
+            />
+            <template #right>
+                <van-button square block style="height: 100%" type="danger" text="删除" @click="deleteTransaction" :loading="loading" />
+            </template>
+        </van-swipe-cell>
+        
     </div>
 </template>
 
@@ -19,56 +25,53 @@
         }
     }
     .income {
-        color: rgb(150, 12, 12);
+        span {
+            color: rgb(150, 12, 12);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
     }
 }
 </style>
 
 <script setup lang="ts">
 import type { Transaction } from '@/api';
-import { useAccountingStore } from '@/stores/accounting';
 import { computed } from 'vue';
 import dayjs from 'dayjs';
-import RelativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(RelativeTime)
+import Calendar from 'dayjs/plugin/calendar';
+import { ref } from 'vue';
+import { transactionApi } from '@/remote';
+dayjs.extend(Calendar)
 
 const props = defineProps<{
     transaction: Transaction;
 }>()
-
-const accountingStore = useAccountingStore()
-
-const categoryName = computed(() => {
-    if (props.transaction.categoryId) {
-        const category = accountingStore.categoryMap[props.transaction.categoryId]
-        if (category) {
-            return category.name
-        } else {
-            return '加载中'
-        }
-    } else {
-        return '未分类'
-    }
-})
-
-const accountName = computed(() => {
-    if (props.transaction.accountId) {
-        const account = accountingStore.accountMap[props.transaction.accountId]
-        if (account) {
-            return account.name
-        } else {
-            return '加载中'
-        }
-    } else {
-        return '未知账户'
-    }
-})
+const emits = defineEmits<{
+    (event: 'update', msg: Transaction): void;
+}>()
+const loading = ref(false)
 
 const transTime = computed(() => {
-    return dayjs(props.transaction.time).fromNow()
+    return dayjs(props.transaction.time).calendar(null, {
+        sameDay: 'HH:mm',
+        lastDay: '昨天 HH:mm',
+        sameElse: 'YYYY-MM-DD',
+    })
 })
 
 const amount = computed(() => {
-    return (props.transaction.amount / 100)
+    return Math.abs(props.transaction.amount / 100)
 })
+
+const deleteTransaction = async () => {
+    loading.value = true
+    try {
+        await transactionApi.transactionsIdDelete({
+            id: props.transaction.id,
+        })
+        emits('update', props.transaction)
+    } finally {
+        loading.value = false
+    }
+}
 </script>

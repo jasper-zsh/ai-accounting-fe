@@ -10,6 +10,7 @@
                 </div>
             </transition>
         </div>
+        <van-floating-bubble icon="wap-home-o" axis="lock" @click="home" />
     </div>
 </template>
 
@@ -50,8 +51,17 @@ import { onMounted } from 'vue';
 import { useAccountingStore } from '@/stores/accounting';
 import 'vant/es/notify/style';
 import 'vant/es/toast/style';
+import { useRouter } from 'vue-router';
 
 const speaking = ref(false)
+
+const router = useRouter()
+
+const home = () => {
+    router.replace({
+        name: 'overview'
+    })
+}
 
 let recorder: MediaRecorder|undefined
 let voiceData: Blob[] = []
@@ -87,10 +97,27 @@ const startSpeaking = async () => {
                         voice: data,
                     },
                 })
-                showNotify({
-                    type: 'success',
-                    message: res.content,
-                })
+                if (res) {
+                    const typeText = (type: string) => {
+                        switch (type) {
+                            case 'expense':
+                                return '支出'
+                            case 'income':
+                                return '收入'
+                            default:
+                                return '未知'
+                        }
+                    }
+                    showNotify({
+                        type: 'success',
+                        message: `账户：${res.account?.name ?? '未知'} 分类：${res.category?.name ?? '未知'} 类型：${typeText(res.type)} 金额：${res.amount / 100}`
+                    })
+                } else {
+                    showNotify({
+                        type: 'warning',
+                        message: '未识别',
+                    })
+                }
             } catch (e) {
                 showFailToast('识别失败')
             }

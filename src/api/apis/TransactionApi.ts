@@ -38,6 +38,10 @@ export interface TransactionsGroupByPostOperationRequest {
     transactionsGroupByPostRequest?: TransactionsGroupByPostRequest;
 }
 
+export interface TransactionsIdDeleteRequest {
+    id: string;
+}
+
 export interface TransactionsPagePostOperationRequest {
     limit?: number;
     page?: number;
@@ -70,6 +74,22 @@ export interface TransactionApiInterface {
      * Group Transactions
      */
     transactionsGroupByPost(requestParameters: TransactionsGroupByPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Delete Transaction
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApiInterface
+     */
+    transactionsIdDeleteRaw(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
+
+    /**
+     * 
+     * Delete Transaction
+     */
+    transactionsIdDelete(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
 
     /**
      * 
@@ -140,6 +160,38 @@ export class TransactionApi extends runtime.BaseAPI implements TransactionApiInt
      */
     async transactionsGroupByPost(requestParameters: TransactionsGroupByPostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.transactionsGroupByPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * 
+     * Delete Transaction
+     */
+    async transactionsIdDeleteRaw(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling transactionsIdDelete.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/transactions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * Delete Transaction
+     */
+    async transactionsIdDelete(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
+        const response = await this.transactionsIdDeleteRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

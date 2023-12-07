@@ -17,12 +17,15 @@ import * as runtime from '../runtime';
 import type {
   AiCommandPostRequest,
   AiVoicePostRequest,
+  Transaction,
 } from '../models/index';
 import {
     AiCommandPostRequestFromJSON,
     AiCommandPostRequestToJSON,
     AiVoicePostRequestFromJSON,
     AiVoicePostRequestToJSON,
+    TransactionFromJSON,
+    TransactionToJSON,
 } from '../models/index';
 
 export interface AiCommandPostOperationRequest {
@@ -48,13 +51,13 @@ export interface AIApiInterface {
      * @throws {RequiredError}
      * @memberof AIApiInterface
      */
-    aiCommandPostRaw(requestParameters: AiCommandPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    aiCommandPostRaw(requestParameters: AiCommandPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
 
     /**
      * 
      * AI Command
      */
-    aiCommandPost(requestParameters: AiCommandPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    aiCommandPost(requestParameters: AiCommandPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
 
     /**
      * 
@@ -64,13 +67,13 @@ export interface AIApiInterface {
      * @throws {RequiredError}
      * @memberof AIApiInterface
      */
-    aiVoicePostRaw(requestParameters: AiVoicePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AiCommandPostRequest>>;
+    aiVoicePostRaw(requestParameters: AiVoicePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
 
     /**
      * 
      * AI Voice
      */
-    aiVoicePost(requestParameters: AiVoicePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AiCommandPostRequest>;
+    aiVoicePost(requestParameters: AiVoicePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
 
 }
 
@@ -83,7 +86,7 @@ export class AIApi extends runtime.BaseAPI implements AIApiInterface {
      * 
      * AI Command
      */
-    async aiCommandPostRaw(requestParameters: AiCommandPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async aiCommandPostRaw(requestParameters: AiCommandPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -98,14 +101,14 @@ export class AIApi extends runtime.BaseAPI implements AIApiInterface {
             body: AiCommandPostRequestToJSON(requestParameters.aiCommandPostRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
     }
 
     /**
      * 
      * AI Command
      */
-    async aiCommandPost(requestParameters: AiCommandPostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+    async aiCommandPost(requestParameters: AiCommandPostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
         const response = await this.aiCommandPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -114,7 +117,7 @@ export class AIApi extends runtime.BaseAPI implements AIApiInterface {
      * 
      * AI Voice
      */
-    async aiVoicePostRaw(requestParameters: AiVoicePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AiCommandPostRequest>> {
+    async aiVoicePostRaw(requestParameters: AiVoicePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -129,14 +132,14 @@ export class AIApi extends runtime.BaseAPI implements AIApiInterface {
             body: AiVoicePostRequestToJSON(requestParameters.aiVoicePostRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AiCommandPostRequestFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
     }
 
     /**
      * 
      * AI Voice
      */
-    async aiVoicePost(requestParameters: AiVoicePostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AiCommandPostRequest> {
+    async aiVoicePost(requestParameters: AiVoicePostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
         const response = await this.aiVoicePostRaw(requestParameters, initOverrides);
         return await response.value();
     }

@@ -3,12 +3,18 @@
         <van-nav-bar title="账户" right-text="新建" @click-right="showCreateDialog = true" />
         <van-pull-refresh style="flex: 1" v-model="accountingStore.loadingAccounts" @refresh="accountingStore.refreshAccounts">
             <van-list>
-                <van-cell
+                <van-swipe-cell
                     v-for="account in accountingStore.accounts"
                     :key="account.id"
-                    :title="account.name"
-                    @click="showEditAccount(account)"
-                ></van-cell>
+                >
+                    <van-cell
+                        :title="account.name"
+                        @click="showEditAccount(account)"
+                    ></van-cell>
+                    <template #right>
+                        <van-button square type="danger" text="删除" @click="deleteAccount(account)" :loading="deleting" />
+                    </template>
+                </van-swipe-cell>
             </van-list>
         </van-pull-refresh>
         <van-dialog v-model:show="showCreateDialog" title="新建账户" show-cancel-button :before-close="addAccount">
@@ -43,6 +49,7 @@ const showEditDialog = ref(false)
 const accountName = ref('')
 const editAccountName = ref('')
 let editAccount: Account|undefined
+const deleting = ref(false)
 
 const addAccount = async (action: any) => {
     if (action !== 'confirm') {
@@ -94,6 +101,20 @@ const editAccountClosed = async (action: any) => {
     } catch (e) {
         showFailToast('发生错误')
         return true
+    }
+}
+
+const deleteAccount = async (account: Account) => {
+    deleting.value = true
+    try {
+        await accountApi.accountsIdDelete({
+            id: account.id,
+        });
+        await accountingStore.refreshAccounts()
+    } catch (e: any) {
+        showFailToast('删除失败')
+    } finally {
+        deleting.value = false
     }
 }
 </script>

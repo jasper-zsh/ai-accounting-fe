@@ -13,6 +13,19 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Account } from './Account';
+import {
+    AccountFromJSON,
+    AccountFromJSONTyped,
+    AccountToJSON,
+} from './Account';
+import type { Category } from './Category';
+import {
+    CategoryFromJSON,
+    CategoryFromJSONTyped,
+    CategoryToJSON,
+} from './Category';
+
 /**
  * 
  * @export
@@ -69,10 +82,22 @@ export interface Transaction {
     categoryId?: number;
     /**
      * 
+     * @type {Category}
+     * @memberof Transaction
+     */
+    category?: Category;
+    /**
+     * 
      * @type {number}
      * @memberof Transaction
      */
     accountId?: number;
+    /**
+     * 
+     * @type {Account}
+     * @memberof Transaction
+     */
+    account?: Account;
     /**
      * 
      * @type {string}
@@ -115,7 +140,9 @@ export function TransactionFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'createdAt': json['createdAt'],
         'updatedAt': json['updatedAt'],
         'categoryId': !exists(json, 'categoryId') ? undefined : json['categoryId'],
+        'category': !exists(json, 'category') ? undefined : CategoryFromJSON(json['category']),
         'accountId': !exists(json, 'accountId') ? undefined : json['accountId'],
+        'account': !exists(json, 'account') ? undefined : AccountFromJSON(json['account']),
         'comment': !exists(json, 'comment') ? undefined : json['comment'],
     };
 }
@@ -137,7 +164,9 @@ export function TransactionToJSON(value?: Transaction | null): any {
         'createdAt': value.createdAt,
         'updatedAt': value.updatedAt,
         'categoryId': value.categoryId,
+        'category': CategoryToJSON(value.category),
         'accountId': value.accountId,
+        'account': AccountToJSON(value.account),
         'comment': value.comment,
     };
 }

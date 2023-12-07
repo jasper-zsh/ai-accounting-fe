@@ -1,23 +1,29 @@
 <template>
     <div class="overview-view">
-        <van-pull-refresh style="flex: 1" v-model="loading" @refresh="load">
-            <van-cell-group title="最近流水">
-                <TransactionRecord
-                    v-for="trans in transactions"
-                    :key="trans.id"
-                    :transaction="trans"
-                />
-            </van-cell-group>
-        </van-pull-refresh>
-        <van-floating-bubble icon="chat" @click="ai" />
+        <div class="container">
+            <van-pull-refresh style="min-height: 100%;" v-model="loading" @refresh="load">
+                <van-cell-group title="最近流水">
+                    <TransactionRecord
+                        v-for="trans in transactions"
+                        :key="trans.id"
+                        :transaction="trans"
+                        @update="load"
+                    />
+                </van-cell-group>
+            </van-pull-refresh>
+        </div>
+        <div class="van-safe-area-bottom"></div>
     </div>
 </template>
 
 <style lang="less" scoped>
 .overview-view {
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    overflow: scroll;
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
 }
 </style>
 
@@ -34,12 +40,6 @@ const transactions = ref<Transaction[]>([])
 
 const router = useRouter()
 
-const ai = () => {
-    router.push({
-        name: 'command'
-    })
-}
-
 const loadRecentTransactions = async () => {
     const res = await transactionApi.transactionsPagePost({
         limit: 20,
@@ -53,6 +53,7 @@ const loadRecentTransactions = async () => {
 }
 
 const load = () => {
+    console.log('load')
     loading.value = true
     Promise.all([
         loadRecentTransactions(),
