@@ -22,7 +22,7 @@ import {
     CategoryToJSON,
 } from '../models/index';
 
-export interface CategoriesPostRequest {
+export interface CreateCategoryRequest {
     body?: object;
 }
 
@@ -35,34 +35,34 @@ export interface CategoriesPostRequest {
 export interface CategoryApiInterface {
     /**
      * 
-     * @summary List Categories
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CategoryApiInterface
-     */
-    categoriesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Category>>>;
-
-    /**
-     * 
-     * List Categories
-     */
-    categoriesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Category>>;
-
-    /**
-     * 
      * @summary Create Category
      * @param {object} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CategoryApiInterface
      */
-    categoriesPostRaw(requestParameters: CategoriesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Category>>;
+    createCategoryRaw(requestParameters: CreateCategoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Category>>;
 
     /**
      * 
      * Create Category
      */
-    categoriesPost(requestParameters: CategoriesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Category>;
+    createCategory(requestParameters: CreateCategoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Category>;
+
+    /**
+     * 
+     * @summary List Categories
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CategoryApiInterface
+     */
+    listCategoriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Category>>>;
+
+    /**
+     * 
+     * List Categories
+     */
+    listCategories(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Category>>;
 
 }
 
@@ -73,37 +73,9 @@ export class CategoryApi extends runtime.BaseAPI implements CategoryApiInterface
 
     /**
      * 
-     * List Categories
-     */
-    async categoriesGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Category>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/categories`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CategoryFromJSON));
-    }
-
-    /**
-     * 
-     * List Categories
-     */
-    async categoriesGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Category>> {
-        const response = await this.categoriesGetRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
      * Create Category
      */
-    async categoriesPostRaw(requestParameters: CategoriesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Category>> {
+    async createCategoryRaw(requestParameters: CreateCategoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Category>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -125,8 +97,36 @@ export class CategoryApi extends runtime.BaseAPI implements CategoryApiInterface
      * 
      * Create Category
      */
-    async categoriesPost(requestParameters: CategoriesPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Category> {
-        const response = await this.categoriesPostRaw(requestParameters, initOverrides);
+    async createCategory(requestParameters: CreateCategoryRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Category> {
+        const response = await this.createCategoryRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * List Categories
+     */
+    async listCategoriesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Category>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/categories`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CategoryFromJSON));
+    }
+
+    /**
+     * 
+     * List Categories
+     */
+    async listCategories(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Category>> {
+        const response = await this.listCategoriesRaw(initOverrides);
         return await response.value();
     }
 

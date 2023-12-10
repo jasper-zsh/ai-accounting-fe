@@ -2,12 +2,24 @@
     <div class="overview-view">
         <div class="container">
             <van-pull-refresh style="min-height: 100%;" v-model="loading" @refresh="load">
-                <van-cell-group title="最近流水">
-                    <TransactionRecord
-                        v-for="trans in transactions"
-                        :key="trans.id"
-                        :transaction="trans"
-                        @update="load"
+                <van-cell-group title="概要">
+                    <OverviewCell
+                        ref="todayCell"
+                        name="今天"
+                        :start="dayjs().startOf('day').toISOString()"
+                        load-last
+                    />
+                    <OverviewCell
+                        ref="thisWeekCell"
+                        :start="dayjs().startOf('week').toISOString()"
+                        :end="dayjs().endOf('week').toISOString()"
+                        name="本周"
+                    />
+                    <OverviewCell
+                        ref="thisMonthCell"
+                        :start="dayjs().startOf('month').toISOString()"
+                        :end="dayjs().endOf('month').toISOString()"
+                        name="本月"
                     />
                 </van-cell-group>
             </van-pull-refresh>
@@ -19,10 +31,21 @@
 <style lang="less" scoped>
 .overview-view {
     height: 100%;
-    overflow: scroll;
     .container {
+        height: 100%;
+        overflow: scroll;
         display: flex;
         flex-direction: column;
+        .expense {
+            font-weight: bold;
+            font-size: 1rem;
+            color: rgb(12, 107, 12);
+        }
+        .income {
+            color: rgb(150, 12, 12);
+            font-weight: bold;
+            font-size: 1rem;
+        }
     }
 }
 </style>
@@ -32,20 +55,21 @@ import type { Transaction } from '@/api';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { transactionApi } from '@/remote';
-import TransactionRecord from '@/components/TransactionRecord.vue';
-import { useRouter } from 'vue-router';
+import dayjs from 'dayjs';
+import OverviewCell from '@/components/OverviewCell.vue';
 
 const loading = ref(false)
 const transactions = ref<Transaction[]>([])
-
-const router = useRouter()
+const todayCell = ref<InstanceType<typeof OverviewCell>>()
+const thisWeekCell = ref<InstanceType<typeof OverviewCell>>()
+const thisMonthCell = ref<InstanceType<typeof OverviewCell>>()
 
 const loadRecentTransactions = async () => {
-    const res = await transactionApi.transactionsPagePost({
+    const res = await transactionApi.paginateTransactions({
         limit: 20,
         page: 1,
-        transactionsPagePostRequest: {
-            filter: {},
+        paginateTransactionsRequest: {
+            filters: {},
         }
     })
     // @ts-ignore
@@ -57,6 +81,9 @@ const load = () => {
     loading.value = true
     Promise.all([
         loadRecentTransactions(),
+        todayCell.value?.load(),
+        thisWeekCell.value?.load(),
+        thisMonthCell.value?.load(),
     ]).finally(() => {
         loading.value = false
     })

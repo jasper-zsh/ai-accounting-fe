@@ -50,6 +50,23 @@ const router = createRouter({
       meta: {
         title: '语音记账'
       }
+    },
+    {
+      path: '/transactions/data/:id',
+      name: 'transactionEdit',
+      component: () => import('@/views/TransactionEditView.vue'),
+      props: true,
+    },
+    {
+      path: '/transactions/create',
+      name: 'transactionCreate',
+      component: () => import('@/views/TransactionEditView.vue'),
+    },
+    {
+      path: '/transactions',
+      name: 'transactionList',
+      component: () => import('@/views/TransactionListView.vue'),
+      props: true,
     }
   ]
 })

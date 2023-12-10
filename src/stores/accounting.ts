@@ -14,7 +14,7 @@ export const useAccountingStore = defineStore('accounting', () => {
   async function refreshAccounts() {
     loadingAccounts.value = true
     try {
-      accounts.value = await accountApi.accountsGet()
+      accounts.value = await accountApi.listAccounts()
       for (const account of accounts.value) {
         accountMap.value[account.id] = account
       }
@@ -26,7 +26,7 @@ export const useAccountingStore = defineStore('accounting', () => {
   async function refreshCategories() {
     loadingCategories.value = true
     try {
-      categories.value = await categoryApi.categoriesGet()
+      categories.value = await categoryApi.listCategories()
       for (const category of categories.value) {
         categoryMap.value[category.id] = category
       }

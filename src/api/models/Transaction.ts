@@ -25,6 +25,12 @@ import {
     CategoryFromJSONTyped,
     CategoryToJSON,
 } from './Category';
+import type { TransactionType } from './TransactionType';
+import {
+    TransactionTypeFromJSON,
+    TransactionTypeFromJSONTyped,
+    TransactionTypeToJSON,
+} from './TransactionType';
 
 /**
  * 
@@ -46,10 +52,10 @@ export interface Transaction {
     userId: string;
     /**
      * 
-     * @type {string}
+     * @type {TransactionType}
      * @memberof Transaction
      */
-    type: string;
+    type: TransactionType;
     /**
      * 
      * @type {number}
@@ -134,7 +140,7 @@ export function TransactionFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'id': json['id'],
         'userId': json['userId'],
-        'type': json['type'],
+        'type': TransactionTypeFromJSON(json['type']),
         'amount': json['amount'],
         'time': json['time'],
         'createdAt': json['createdAt'],
@@ -158,7 +164,7 @@ export function TransactionToJSON(value?: Transaction | null): any {
         
         'id': value.id,
         'userId': value.userId,
-        'type': value.type,
+        'type': TransactionTypeToJSON(value.type),
         'amount': value.amount,
         'time': value.time,
         'createdAt': value.createdAt,

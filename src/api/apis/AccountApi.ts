@@ -16,26 +16,26 @@
 import * as runtime from '../runtime';
 import type {
   Account,
-  AccountsPostRequest,
+  CreateAccountRequest,
 } from '../models/index';
 import {
     AccountFromJSON,
     AccountToJSON,
-    AccountsPostRequestFromJSON,
-    AccountsPostRequestToJSON,
+    CreateAccountRequestFromJSON,
+    CreateAccountRequestToJSON,
 } from '../models/index';
 
-export interface AccountsIdDeleteRequest {
+export interface CreateAccountOperationRequest {
+    createAccountRequest?: CreateAccountRequest;
+}
+
+export interface DeleteAccountRequest {
     id: number;
 }
 
-export interface AccountsIdPostRequest {
+export interface UpdateAccountRequest {
     id: number;
-    accountsPostRequest?: AccountsPostRequest;
-}
-
-export interface AccountsPostOperationRequest {
-    accountsPostRequest?: AccountsPostRequest;
+    createAccountRequest?: CreateAccountRequest;
 }
 
 /**
@@ -47,18 +47,19 @@ export interface AccountsPostOperationRequest {
 export interface AccountApiInterface {
     /**
      * 
-     * @summary List Accounts
+     * @summary Create Account
+     * @param {CreateAccountRequest} [createAccountRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Account>>>;
+    createAccountRaw(requestParameters: CreateAccountOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
 
     /**
      * 
-     * List Accounts
+     * Create Account
      */
-    accountsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>>;
+    createAccount(requestParameters: CreateAccountOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
 
     /**
      * 
@@ -68,46 +69,45 @@ export interface AccountApiInterface {
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountsIdDeleteRaw(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
+    deleteAccountRaw(requestParameters: DeleteAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
 
     /**
      * 
      * Delete Account
      */
-    accountsIdDelete(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
+    deleteAccount(requestParameters: DeleteAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
+
+    /**
+     * 
+     * @summary List Accounts
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApiInterface
+     */
+    listAccountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Account>>>;
+
+    /**
+     * 
+     * List Accounts
+     */
+    listAccounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>>;
 
     /**
      * 
      * @summary Update Account
      * @param {number} id 
-     * @param {AccountsPostRequest} [accountsPostRequest] 
+     * @param {CreateAccountRequest} [createAccountRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountApiInterface
      */
-    accountsIdPostRaw(requestParameters: AccountsIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
+    updateAccountRaw(requestParameters: UpdateAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
 
     /**
      * 
      * Update Account
      */
-    accountsIdPost(requestParameters: AccountsIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
-
-    /**
-     * 
-     * @summary Create Account
-     * @param {AccountsPostRequest} [accountsPostRequest] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AccountApiInterface
-     */
-    accountsPostRaw(requestParameters: AccountsPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>>;
-
-    /**
-     * 
-     * Create Account
-     */
-    accountsPost(requestParameters: AccountsPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
+    updateAccount(requestParameters: UpdateAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account>;
 
 }
 
@@ -118,29 +118,32 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
 
     /**
      * 
-     * List Accounts
+     * Create Account
      */
-    async accountsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Account>>> {
+    async createAccountRaw(requestParameters: CreateAccountOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+        headerParameters['Content-Type'] = 'application/json';
+
         const response = await this.request({
             path: `/accounts`,
-            method: 'GET',
+            method: 'POST',
             headers: headerParameters,
             query: queryParameters,
+            body: CreateAccountRequestToJSON(requestParameters.createAccountRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AccountFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
     }
 
     /**
      * 
-     * List Accounts
+     * Create Account
      */
-    async accountsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>> {
-        const response = await this.accountsGetRaw(initOverrides);
+    async createAccount(requestParameters: CreateAccountOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+        const response = await this.createAccountRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -148,9 +151,9 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      * 
      * Delete Account
      */
-    async accountsIdDeleteRaw(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
+    async deleteAccountRaw(requestParameters: DeleteAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling accountsIdDelete.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteAccount.');
         }
 
         const queryParameters: any = {};
@@ -171,8 +174,36 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      * 
      * Delete Account
      */
-    async accountsIdDelete(requestParameters: AccountsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
-        const response = await this.accountsIdDeleteRaw(requestParameters, initOverrides);
+    async deleteAccount(requestParameters: DeleteAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+        const response = await this.deleteAccountRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * List Accounts
+     */
+    async listAccountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Account>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/accounts`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(AccountFromJSON));
+    }
+
+    /**
+     * 
+     * List Accounts
+     */
+    async listAccounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Account>> {
+        const response = await this.listAccountsRaw(initOverrides);
         return await response.value();
     }
 
@@ -180,9 +211,9 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      * 
      * Update Account
      */
-    async accountsIdPostRaw(requestParameters: AccountsIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
+    async updateAccountRaw(requestParameters: UpdateAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling accountsIdPost.');
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateAccount.');
         }
 
         const queryParameters: any = {};
@@ -196,7 +227,7 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AccountsPostRequestToJSON(requestParameters.accountsPostRequest),
+            body: CreateAccountRequestToJSON(requestParameters.createAccountRequest),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
@@ -206,39 +237,8 @@ export class AccountApi extends runtime.BaseAPI implements AccountApiInterface {
      * 
      * Update Account
      */
-    async accountsIdPost(requestParameters: AccountsIdPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
-        const response = await this.accountsIdPostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
-     * Create Account
-     */
-    async accountsPostRaw(requestParameters: AccountsPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Account>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/accounts`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: AccountsPostRequestToJSON(requestParameters.accountsPostRequest),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AccountFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * Create Account
-     */
-    async accountsPost(requestParameters: AccountsPostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
-        const response = await this.accountsPostRaw(requestParameters, initOverrides);
+    async updateAccount(requestParameters: UpdateAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Account> {
+        const response = await this.updateAccountRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

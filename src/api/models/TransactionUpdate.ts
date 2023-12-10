@@ -23,63 +23,69 @@ import {
 /**
  * 
  * @export
- * @interface TransactionGroupResult
+ * @interface TransactionUpdate
  */
-export interface TransactionGroupResult {
+export interface TransactionUpdate {
     /**
      * 
      * @type {number}
-     * @memberof TransactionGroupResult
-     */
-    amount: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof TransactionGroupResult
+     * @memberof TransactionUpdate
      */
     accountId?: number;
     /**
      * 
      * @type {number}
-     * @memberof TransactionGroupResult
+     * @memberof TransactionUpdate
      */
     categoryId?: number;
     /**
      * 
      * @type {TransactionType}
-     * @memberof TransactionGroupResult
+     * @memberof TransactionUpdate
      */
     type?: TransactionType;
+    /**
+     * 
+     * @type {number}
+     * @memberof TransactionUpdate
+     */
+    amount?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof TransactionUpdate
+     */
+    comment?: string;
 }
 
 /**
- * Check if a given object implements the TransactionGroupResult interface.
+ * Check if a given object implements the TransactionUpdate interface.
  */
-export function instanceOfTransactionGroupResult(value: object): boolean {
+export function instanceOfTransactionUpdate(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "amount" in value;
 
     return isInstance;
 }
 
-export function TransactionGroupResultFromJSON(json: any): TransactionGroupResult {
-    return TransactionGroupResultFromJSONTyped(json, false);
+export function TransactionUpdateFromJSON(json: any): TransactionUpdate {
+    return TransactionUpdateFromJSONTyped(json, false);
 }
 
-export function TransactionGroupResultFromJSONTyped(json: any, ignoreDiscriminator: boolean): TransactionGroupResult {
+export function TransactionUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean): TransactionUpdate {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'amount': json['amount'],
         'accountId': !exists(json, 'accountId') ? undefined : json['accountId'],
         'categoryId': !exists(json, 'categoryId') ? undefined : json['categoryId'],
         'type': !exists(json, 'type') ? undefined : TransactionTypeFromJSON(json['type']),
+        'amount': !exists(json, 'amount') ? undefined : json['amount'],
+        'comment': !exists(json, 'comment') ? undefined : json['comment'],
     };
 }
 
-export function TransactionGroupResultToJSON(value?: TransactionGroupResult | null): any {
+export function TransactionUpdateToJSON(value?: TransactionUpdate | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -88,10 +94,11 @@ export function TransactionGroupResultToJSON(value?: TransactionGroupResult | nu
     }
     return {
         
-        'amount': value.amount,
         'accountId': value.accountId,
         'categoryId': value.categoryId,
         'type': TransactionTypeToJSON(value.type),
+        'amount': value.amount,
+        'comment': value.comment,
     };
 }
 

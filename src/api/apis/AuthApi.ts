@@ -31,11 +31,11 @@ import {
     UserToJSON,
 } from '../models/index';
 
-export interface AuthLoginPostRequest {
+export interface LoginOperationRequest {
     loginRequest?: LoginRequest;
 }
 
-export interface AuthRegisterPostRequest {
+export interface RegisterOperationRequest {
     registerRequest?: RegisterRequest;
 }
 
@@ -54,13 +54,13 @@ export interface AuthApiInterface {
      * @throws {RequiredError}
      * @memberof AuthApiInterface
      */
-    authLoginPostRaw(requestParameters: AuthLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>>;
+    loginRaw(requestParameters: LoginOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>>;
 
     /**
      * 
      * Login
      */
-    authLoginPost(requestParameters: AuthLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse>;
+    login(requestParameters: LoginOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse>;
 
     /**
      * 
@@ -69,13 +69,13 @@ export interface AuthApiInterface {
      * @throws {RequiredError}
      * @memberof AuthApiInterface
      */
-    authLogoutGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    logoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 
      * Logout
      */
-    authLogoutGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    logout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * 
@@ -85,13 +85,13 @@ export interface AuthApiInterface {
      * @throws {RequiredError}
      * @memberof AuthApiInterface
      */
-    authRegisterPostRaw(requestParameters: AuthRegisterPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
+    registerRaw(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
 
     /**
      * 
      * Register
      */
-    authRegisterPost(requestParameters: AuthRegisterPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
+    register(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
 
 }
 
@@ -104,7 +104,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * 
      * Login
      */
-    async authLoginPostRaw(requestParameters: AuthLoginPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>> {
+    async loginRaw(requestParameters: LoginOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -126,8 +126,8 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * 
      * Login
      */
-    async authLoginPost(requestParameters: AuthLoginPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse> {
-        const response = await this.authLoginPostRaw(requestParameters, initOverrides);
+    async login(requestParameters: LoginOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginResponse> {
+        const response = await this.loginRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -135,7 +135,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * 
      * Logout
      */
-    async authLogoutGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async logoutRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -154,8 +154,8 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * 
      * Logout
      */
-    async authLogoutGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.authLogoutGetRaw(initOverrides);
+    async logout(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.logoutRaw(initOverrides);
         return await response.value();
     }
 
@@ -163,7 +163,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * 
      * Register
      */
-    async authRegisterPostRaw(requestParameters: AuthRegisterPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+    async registerRaw(requestParameters: RegisterOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -185,8 +185,8 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
      * 
      * Register
      */
-    async authRegisterPost(requestParameters: AuthRegisterPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
-        const response = await this.authRegisterPostRaw(requestParameters, initOverrides);
+    async register(requestParameters: RegisterOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+        const response = await this.registerRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

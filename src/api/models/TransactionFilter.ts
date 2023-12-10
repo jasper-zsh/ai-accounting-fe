@@ -13,6 +13,19 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { DateTimeFilter } from './DateTimeFilter';
+import {
+    DateTimeFilterFromJSON,
+    DateTimeFilterFromJSONTyped,
+    DateTimeFilterToJSON,
+} from './DateTimeFilter';
+import type { TransactionType } from './TransactionType';
+import {
+    TransactionTypeFromJSON,
+    TransactionTypeFromJSONTyped,
+    TransactionTypeToJSON,
+} from './TransactionType';
+
 /**
  * 
  * @export
@@ -33,16 +46,16 @@ export interface TransactionFilter {
     categoryId?: number;
     /**
      * 
-     * @type {string}
+     * @type {TransactionType}
      * @memberof TransactionFilter
      */
-    type?: string;
+    type?: TransactionType;
     /**
      * 
-     * @type {string}
+     * @type {DateTimeFilter}
      * @memberof TransactionFilter
      */
-    time?: string;
+    time?: DateTimeFilter;
 }
 
 /**
@@ -66,8 +79,8 @@ export function TransactionFilterFromJSONTyped(json: any, ignoreDiscriminator: b
         
         'accountId': !exists(json, 'accountId') ? undefined : json['accountId'],
         'categoryId': !exists(json, 'categoryId') ? undefined : json['categoryId'],
-        'type': !exists(json, 'type') ? undefined : json['type'],
-        'time': !exists(json, 'time') ? undefined : json['time'],
+        'type': !exists(json, 'type') ? undefined : TransactionTypeFromJSON(json['type']),
+        'time': !exists(json, 'time') ? undefined : DateTimeFilterFromJSON(json['time']),
     };
 }
 
@@ -82,8 +95,8 @@ export function TransactionFilterToJSON(value?: TransactionFilter | null): any {
         
         'accountId': value.accountId,
         'categoryId': value.categoryId,
-        'type': value.type,
-        'time': value.time,
+        'type': TransactionTypeToJSON(value.type),
+        'time': DateTimeFilterToJSON(value.time),
     };
 }
 

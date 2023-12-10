@@ -15,41 +15,53 @@
 
 import * as runtime from '../runtime';
 import type {
+  GroupTransactionsRequest,
   Page,
+  PaginateTransactionsRequest,
   Transaction,
-  TransactionsGroupByPost401Response,
-  TransactionsGroupByPostRequest,
-  TransactionsPagePostRequest,
+  TransactionGroupResult,
+  TransactionUpdate,
 } from '../models/index';
 import {
+    GroupTransactionsRequestFromJSON,
+    GroupTransactionsRequestToJSON,
     PageFromJSON,
     PageToJSON,
+    PaginateTransactionsRequestFromJSON,
+    PaginateTransactionsRequestToJSON,
     TransactionFromJSON,
     TransactionToJSON,
-    TransactionsGroupByPost401ResponseFromJSON,
-    TransactionsGroupByPost401ResponseToJSON,
-    TransactionsGroupByPostRequestFromJSON,
-    TransactionsGroupByPostRequestToJSON,
-    TransactionsPagePostRequestFromJSON,
-    TransactionsPagePostRequestToJSON,
+    TransactionGroupResultFromJSON,
+    TransactionGroupResultToJSON,
+    TransactionUpdateFromJSON,
+    TransactionUpdateToJSON,
 } from '../models/index';
 
-export interface TransactionsGroupByPostOperationRequest {
-    transactionsGroupByPostRequest?: TransactionsGroupByPostRequest;
+export interface CreateTransactionRequest {
+    body?: object;
 }
 
-export interface TransactionsIdDeleteRequest {
+export interface DeleteTransactionRequest {
     id: string;
 }
 
-export interface TransactionsPagePostOperationRequest {
-    limit?: number;
-    page?: number;
-    transactionsPagePostRequest?: TransactionsPagePostRequest;
+export interface GetTransactionRequest {
+    id: string;
 }
 
-export interface TransactionsPostRequest {
-    body?: object;
+export interface GroupTransactionsOperationRequest {
+    groupTransactionsRequest?: GroupTransactionsRequest;
+}
+
+export interface PaginateTransactionsOperationRequest {
+    limit?: number;
+    page?: number;
+    paginateTransactionsRequest?: PaginateTransactionsRequest;
+}
+
+export interface UpdateTransactionRequest {
+    id: string;
+    transactionUpdate?: TransactionUpdate;
 }
 
 /**
@@ -61,19 +73,19 @@ export interface TransactionsPostRequest {
 export interface TransactionApiInterface {
     /**
      * 
-     * @summary Group Transactions
-     * @param {TransactionsGroupByPostRequest} [transactionsGroupByPostRequest] 
+     * @summary Create Transaction
+     * @param {object} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionApiInterface
      */
-    transactionsGroupByPostRaw(requestParameters: TransactionsGroupByPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    createTransactionRaw(requestParameters: CreateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
 
     /**
      * 
-     * Group Transactions
+     * Create Transaction
      */
-    transactionsGroupByPost(requestParameters: TransactionsGroupByPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    createTransaction(requestParameters: CreateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
 
     /**
      * 
@@ -83,47 +95,80 @@ export interface TransactionApiInterface {
      * @throws {RequiredError}
      * @memberof TransactionApiInterface
      */
-    transactionsIdDeleteRaw(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
+    deleteTransactionRaw(requestParameters: DeleteTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
 
     /**
      * 
      * Delete Transaction
      */
-    transactionsIdDelete(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
+    deleteTransaction(requestParameters: DeleteTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
+
+    /**
+     * 
+     * @summary Get Transaction
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApiInterface
+     */
+    getTransactionRaw(requestParameters: GetTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
+
+    /**
+     * 
+     * Get Transaction
+     */
+    getTransaction(requestParameters: GetTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
+
+    /**
+     * 
+     * @summary Group Transactions
+     * @param {GroupTransactionsRequest} [groupTransactionsRequest] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TransactionApiInterface
+     */
+    groupTransactionsRaw(requestParameters: GroupTransactionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TransactionGroupResult>>>;
+
+    /**
+     * 
+     * Group Transactions
+     */
+    groupTransactions(requestParameters: GroupTransactionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TransactionGroupResult>>;
 
     /**
      * 
      * @summary Paginate Transactions
      * @param {number} [limit] 
      * @param {number} [page] 
-     * @param {TransactionsPagePostRequest} [transactionsPagePostRequest] 
+     * @param {PaginateTransactionsRequest} [paginateTransactionsRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionApiInterface
      */
-    transactionsPagePostRaw(requestParameters: TransactionsPagePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Page>>;
+    paginateTransactionsRaw(requestParameters: PaginateTransactionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Page>>;
 
     /**
      * 
      * Paginate Transactions
      */
-    transactionsPagePost(requestParameters: TransactionsPagePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Page>;
+    paginateTransactions(requestParameters: PaginateTransactionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Page>;
 
     /**
      * 
-     * @summary Create Transaction
-     * @param {object} [body] 
+     * @summary Update Transaction
+     * @param {string} id 
+     * @param {TransactionUpdate} [transactionUpdate] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TransactionApiInterface
      */
-    transactionsPostRaw(requestParameters: TransactionsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
+    updateTransactionRaw(requestParameters: UpdateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>>;
 
     /**
      * 
-     * Create Transaction
+     * Update Transaction
      */
-    transactionsPost(requestParameters: TransactionsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
+    updateTransaction(requestParameters: UpdateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction>;
 
 }
 
@@ -134,110 +179,9 @@ export class TransactionApi extends runtime.BaseAPI implements TransactionApiInt
 
     /**
      * 
-     * Group Transactions
-     */
-    async transactionsGroupByPostRaw(requestParameters: TransactionsGroupByPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/transactions/group-by`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: TransactionsGroupByPostRequestToJSON(requestParameters.transactionsGroupByPostRequest),
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * 
-     * Group Transactions
-     */
-    async transactionsGroupByPost(requestParameters: TransactionsGroupByPostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.transactionsGroupByPostRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     * 
-     * Delete Transaction
-     */
-    async transactionsIdDeleteRaw(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling transactionsIdDelete.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/transactions/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * Delete Transaction
-     */
-    async transactionsIdDelete(requestParameters: TransactionsIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
-        const response = await this.transactionsIdDeleteRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
-     * Paginate Transactions
-     */
-    async transactionsPagePostRaw(requestParameters: TransactionsPagePostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Page>> {
-        const queryParameters: any = {};
-
-        if (requestParameters.limit !== undefined) {
-            queryParameters['limit'] = requestParameters.limit;
-        }
-
-        if (requestParameters.page !== undefined) {
-            queryParameters['page'] = requestParameters.page;
-        }
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/transactions/page`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: TransactionsPagePostRequestToJSON(requestParameters.transactionsPagePostRequest),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => PageFromJSON(jsonValue));
-    }
-
-    /**
-     * 
-     * Paginate Transactions
-     */
-    async transactionsPagePost(requestParameters: TransactionsPagePostOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Page> {
-        const response = await this.transactionsPagePostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * 
      * Create Transaction
      */
-    async transactionsPostRaw(requestParameters: TransactionsPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
+    async createTransactionRaw(requestParameters: CreateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -259,8 +203,177 @@ export class TransactionApi extends runtime.BaseAPI implements TransactionApiInt
      * 
      * Create Transaction
      */
-    async transactionsPost(requestParameters: TransactionsPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
-        const response = await this.transactionsPostRaw(requestParameters, initOverrides);
+    async createTransaction(requestParameters: CreateTransactionRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
+        const response = await this.createTransactionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Delete Transaction
+     */
+    async deleteTransactionRaw(requestParameters: DeleteTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling deleteTransaction.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/transactions/data/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * Delete Transaction
+     */
+    async deleteTransaction(requestParameters: DeleteTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
+        const response = await this.deleteTransactionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Get Transaction
+     */
+    async getTransactionRaw(requestParameters: GetTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling getTransaction.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/transactions/data/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * Get Transaction
+     */
+    async getTransaction(requestParameters: GetTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
+        const response = await this.getTransactionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Group Transactions
+     */
+    async groupTransactionsRaw(requestParameters: GroupTransactionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TransactionGroupResult>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/transactions/query/group-by`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: GroupTransactionsRequestToJSON(requestParameters.groupTransactionsRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TransactionGroupResultFromJSON));
+    }
+
+    /**
+     * 
+     * Group Transactions
+     */
+    async groupTransactions(requestParameters: GroupTransactionsOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TransactionGroupResult>> {
+        const response = await this.groupTransactionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Paginate Transactions
+     */
+    async paginateTransactionsRaw(requestParameters: PaginateTransactionsOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Page>> {
+        const queryParameters: any = {};
+
+        if (requestParameters.limit !== undefined) {
+            queryParameters['limit'] = requestParameters.limit;
+        }
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/transactions/query/page`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PaginateTransactionsRequestToJSON(requestParameters.paginateTransactionsRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * Paginate Transactions
+     */
+    async paginateTransactions(requestParameters: PaginateTransactionsOperationRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Page> {
+        const response = await this.paginateTransactionsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * 
+     * Update Transaction
+     */
+    async updateTransactionRaw(requestParameters: UpdateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Transaction>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling updateTransaction.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/transactions/data/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TransactionUpdateToJSON(requestParameters.transactionUpdate),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
+    }
+
+    /**
+     * 
+     * Update Transaction
+     */
+    async updateTransaction(requestParameters: UpdateTransactionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Transaction> {
+        const response = await this.updateTransactionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
