@@ -61,13 +61,13 @@ const back = () => {
 const registerAndLogin = async (data: any) => {
     const { username, password } = data;
     try {
-        await authApi.authRegisterPost({
+        await authApi.register({
             registerRequest: {
                 username,
                 password,
             },
         });
-        await authApi.authLoginPost({
+        await authApi.login({
             loginRequest: {
                 username,
                 password,

@@ -92,8 +92,8 @@ const startSpeaking = async () => {
             const data = arrayBufferToBase64(await blob.arrayBuffer())
             speaking.value = false;
             try {
-                const res = await aiApi.aiVoicePost({
-                    aiVoicePostRequest: {
+                const res = await aiApi.aiVoice({
+                    aiVoiceRequest: {
                         voice: data,
                     },
                 })

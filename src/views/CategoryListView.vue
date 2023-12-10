@@ -47,7 +47,7 @@ const addCategory = async (action: any) => {
         return false
     }
     try {
-        await categoryApi.categoriesPost({
+        await categoryApi.createCategory({
             body: {
                 name: categoryName.value,
             },

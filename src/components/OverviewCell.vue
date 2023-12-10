@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<{
     start: string;
     end?: string;
     name: string;
-    loadLast: boolean;
+    loadLast?: boolean;
 }>(), {
     loadLast: false,
 })

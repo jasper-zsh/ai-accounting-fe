@@ -56,7 +56,7 @@ const password = ref('');
 
 const login = async () => {
     try {
-        await authApi.authLoginPost({
+        await authApi.login({
             loginRequest: {
                 username: username.value,
                 password: password.value,

@@ -18,7 +18,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const logout = async () => {
-    await authApi.authLogoutGet()
+    await authApi.logout()
     showSuccessToast('已退出登录')
     router.replace({
         name: 'login',
