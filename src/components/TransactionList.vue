@@ -4,7 +4,7 @@
             v-for="trans in transactions"
             :key="trans.id"
             :transaction="trans"
-            @update="emits('update')"
+            @update="emits('update', $event)"
         />
     </div>
 </template>
@@ -17,7 +17,7 @@ const props = defineProps<{
     transactions: Transaction[]
 }>()
 const emits = defineEmits<{
-    (e: 'update'): void
+    (e: 'update', val: Transaction): void
 }>()
 
 </script>

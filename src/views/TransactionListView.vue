@@ -8,10 +8,9 @@
                 @load="load"
                 :immediate-check="false"
             >
-                <TransactionRecord
-                    v-for="trans in transactions"
-                    :key="trans.id"
-                    :transaction="trans"
+                <TransactionList
+                    :transactions="transactions"
+                    @update="transactions = transactions.filter(t => t.id !== $event.id)"
                 />
             </van-list>
         </van-pull-refresh>
@@ -32,7 +31,7 @@ import { transactionApi } from '@/remote';
 import { onMounted } from 'vue';
 import { computed } from 'vue';
 import { ref } from 'vue';
-import TransactionRecord from '@/components/TransactionRecord.vue';
+import TransactionList from '@/components/TransactionList.vue';
 import { useRoute } from 'vue-router';
 import type { TransactionFilter } from '@/api';
 

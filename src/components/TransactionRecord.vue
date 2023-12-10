@@ -43,7 +43,6 @@ import dayjs from 'dayjs';
 import Calendar from 'dayjs/plugin/calendar';
 import { ref } from 'vue';
 import { transactionApi } from '@/remote';
-import { useRouter } from 'vue-router';
 import { formatMoney } from '@/utils/strings';
 dayjs.extend(Calendar)
 
@@ -54,8 +53,6 @@ const emits = defineEmits<{
     (event: 'update', msg: Transaction): void;
 }>()
 const loading = ref(false)
-
-const router = useRouter()
 
 const transTime = computed(() => {
     return dayjs(props.transaction.time).calendar(null, {
@@ -78,12 +75,4 @@ const deleteTransaction = async () => {
     }
 }
 
-const edit = (trans: Transaction) => {
-    router.push({
-        name: 'transactionEdit',
-        params: {
-            id: trans.id,
-        },
-    })
-}
 </script>
